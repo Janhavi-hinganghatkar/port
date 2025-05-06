@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Janhavi's Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; 
+        margin: 0;
+        padding: 0;}
+
+    body {
+        font-family: 'Poppins', 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #2c5364, #203a43, #0f2027);
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+    
+    #canvas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.7;
+    }
+
+    .container {
+      display: none; /* Changed from flex to none initially */
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .about-me, .education-me, .skills-me, .certificates-me, .contact-me, .achievements-me, .hobbies-me {
+      display: none;
+      padding: 60px 30px;
+      width: 90%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: fadeIn 1s ease;
+      margin: 20px auto;
+    }
+
+    .intro-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hi-text {
+      font-size: 56px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      animation: typing 2.5s steps(10), blink 0.5s step-end infinite alternate;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 3px solid #fff;
+      margin-bottom: 15px;
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .welcome-text {
+      font-size: 22px;
+      color: #ddd;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .start-btn, .scroll-btn, .nav-tab {
+      background: #ff4b2b;
+      color: white;
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      margin: 5px;
+    }
+
+    .start-btn:hover, .scroll-btn:hover, .nav-tab:hover {
+      background: #ff416c;
+      transform: scale(1.05);
+    }
+
+    .start-btn::before, .scroll-btn::before, .nav-tab::before {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff416c);
+      transition: all 0.5s ease;
+      z-index: -1;
+      transform: scale(0);
+      border-radius: 50%;
+    }
+
+    .start-btn:hover::before, .scroll-btn:hover::before, .nav-tab:hover::before {
+      transform: scale(1);
+      border-radius: 0;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #ffd700;
+      text-align: center;
+    }
+
+    a {
+      color: #00ffff;
+      transition: 0.3s;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+
+    img {
+      border-radius: 10px;
+      max-width: 100%;
+      margin: 10px 0;
+      border: 2px solid #fff;
+      transition: transform 0.3s ease;
+    }
+
+    .skill-bar { 
+      margin: 10px 0;
+    }
+    
+    .bar-title { 
+      font-weight: bold; 
+      margin-bottom: 5px; 
+      font-size: 20px;
+    }
+
+    .bar-container {
+      background-color: #444;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+    }
+
+    .bar {
+      padding: 5px;
+      color: white;
+      text-align: right;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      transition: width 1.5s ease-in-out;
+      font-size: 12px;
+      line-height: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    textarea { resize: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .certificate-grid, .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .certificate-item, .gallery-item {
+      overflow: hidden;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .certificate-item:hover, .gallery-item:hover {
+      transform: translateY(-5px) scale(1.03);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      animation: fadeIn 0.5s ease;
+      font-size: 14px;
+    }
+
+    .social-links a:hover {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      transform: translateY(-3px) rotate(10deg);
+      box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    /* Enhanced Contact Section Styles */
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 30px 0;
+    }
+    
+    .contact-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 20px;
+      width: 200px;
+      text-align: center;
+      margin: 10px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    .contact-card i {
+      font-size: 30px;
+      margin-bottom: 10px;
+      color: #ffd700;
+    }
+    
+    .contact-card h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    
+    .contact-card p {
+      font-size: 14px;
+      color: #ddd;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      width: 100%;
+      display: block;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+    }
+    
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+    
+    .contact-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .contact-header p {
+      font-size: 16px;
+      color: #ddd;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Modal styles for image gallery */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      overflow: auto;
+    }
+    
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 80%;
+      max-height: 80%;
+      margin-top: 50px;
+      animation: zoom 0.3s;
+    }
+    
+    @keyframes zoom {
+      from {transform: scale(0.5);}
+      to {transform: scale(1);}
+    }
+    
+    .modal-info {
+      color: white;
+      text-align: center;
+      padding: 20px;
+      max-width: 80%;
+      margin: 0 auto;
+    }
+    
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: #ff416c;
+      transform: rotate(90deg);
+    }
+    
+    /* Hobbies section styles */
+    .hobby-item {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 15px 0;
+      transition: all 0.3s ease;
+    }
+    
+    .hobby-item:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    .hobby-item h3 {
+      color: #ffd700;
+      margin-bottom: 10px;
+    }
+    
+    .hobby-item p {
+      margin-bottom: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .hi-text { font-size: 28px; }
+      h2 { font-size: 24px; }
+      .certificate-grid, .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+      .nav-tab {
+        width: 80%;
+        margin: 5px 0;
+      }
+      .contact-card {
+        width: 100%;
+      }
+      .modal-content {
+        max-width: 95%;
+        max-height: 60%;
+      }
+    }
+
+    #scrollTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 99;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #scrollTopBtn:hover { background: #555; }
+    
+    /* Floating animation */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    /* Pulse animation for contact icons */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- Intro Section -->
+<div class="intro-section" id="introSection" data-aos="fade-up">
+  <div class="hi-text"><i class="fas fa-hand-peace"></i> Hi!!</div>
+  <p class="welcome-text"><i class="fas fa-code"></i> &lt;Welcome to My Portfolio&gt;</p>
+  
+  <div class="nav-tabs">
+    <button class="nav-tab" onclick="showSection('aboutMeSection')"><i class="fas fa-user"></i> About</button>
+    <button class="nav-tab" onclick="showSection('educationSection')"><i class="fas fa-graduation-cap"></i> Education</button>
+    <button class="nav-tab" onclick="showSection('achievementsSection')"><i class="fas fa-trophy"></i> Achievements</button>
+    <button class="nav-tab" onclick="showSection('hobbiesSection')"><i class="fas fa-heart"></i> Hobbies</button>
+    <button class="nav-tab" onclick="showSection('skillsSection')"><i class="fas fa-tools"></i> Skills</button>
+    <button class="nav-tab" onclick="showSection('certificatesSection')"><i class="fas fa-certificate"></i> Certificates</button>
+    <button class="nav-tab" onclick="showSection('contactSection')"><i class="fas fa-envelope"></i> Contact</button>
+  </div>
+  
+  <button class="start-btn" onclick="startPortfolio()">Start Exploring</button>
+</div>
+
+<!-- About Me -->
+<div class="container">
+  <div class="about-me" id="aboutMeSection" data-aos="fade-up">
+    <h2><i class="fas fa-user"></i> About Me</h2>
+    <img src="me.jpg" alt="Profile Picture" style="float: right; width: 200px;">
+    <p>Hello...<br>I'm <u><a href="https://www.instagram.com/_janhavi.18" target="_blank">JANHAVI HINGANGHATKAR</a></u> from Wardha.<br>
+      My aim is to create remarkable projects.<br>
+      I'm passionate about coding and problem solving, always eager to explore new technologies and algorithms.<br><br>
+      Outside tech world, I'm a nature-loving artist and photography, always looking to capture inspiration from the world around me.<br><br>
+      Beyond Academics, I keep interest in drawing,dance and art.<br>
+       I love coding, photography & art 🌸<br>
+    <div class="social-links">
+      <a href="https://www.instagram.com/_janhavi.18" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.linkedin.com/in/ " target="_blank"><i class="fab fa-linkedin-in"></i></a>
+      <a href="mailto:hinganghatkarj@gmail.com"><i class="fas fa-envelope"></i></a>
+    </div>
+    <button class="scroll-btn" onclick="showSection('educationSection')">Education <i class="fa-solid fa-arrow-down"></i></button>
+  </div>
+</div>
+
+<!-- Education -->
+<div class="container">
+  <div class="education-me" id="educationSection" data-aos="fade-up">
+    <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+    <p>
+      <p>
+        <b>Secondary School Certificate (SSC)</b>
+        New English Convent, Wardha |Completed in [2022]<br>
+
+        <b>Higher Secondary Certificate (HSC)</b>
+        Sant John , Wardha |Completed in [2024]<br>
+        Completed higher secondary education with a strong foundation in Physics, Chemistry,Biology and Mathematics.<br><br>
+
+        <b>Bachelor of Technology (B.Tech) in Computer Engineering</b><br>
+        MIT Acadamy of Engineering Alandi, Pune | 2024-2028<br>
+        Received merit-based scholarship for academic excellence in First Year.<br>
+        Apart from regular studies, I actively participate in technical events, projects,Workshop and club activity.<br>
+        Complete online certificate in Al,Python,C alongside regular coursework.<br><br>
+
+       <b>LinkedIn:</b> <a href="https://www.linkedin.com/in/ragini-telange-012411358" target="_blank">Connect with me</a><br>
+       <b>Email:</b> <a href="mailto:hinganghatkar@gmail.com">hinganghtkarj@gmail.com</a><br>
+       <b>Email:</b> <a href="mailto:202401100025@mitaoe.ac.in">202401100025@mitaoe.ac.in</a>
+    </p>
+    <button class="scroll-btn" onclick="showSection('achievementsSection')">Achievements <i class="fa-solid fa-arrow-down"></i></button>
+  </div>
+</div>
+
+<!-- Achievements -->
+<div class="container">
+  <div class="achievements-me" id="achievementsSection" data-aos="fade-up">
+    <h2><i class="fas fa-trophy"></i> My Achievements</h2>
+    <p><strong>Carrom Runner-Up</strong> – In FIRST YEAR the inter-college carrom tournament during the Nakshtra sports event at MITAOE.</p>
+    <!-- First Image -->
+    <img src="C:\Users\hinga\OneDrive\Documents\carrom.jpg" alt="carrom" style="float: left; width: 350px; height: 400px; margin-right: 20px;">
+    <!-- Second Image -->
+    <img src="C:\Users\hinga\OneDrive\Desktop\Portfolio\trophy.jpg" alt="trophy" style="float: left; width: 350px; height: 400px; margin-right: 20px;">
+    <h2 style="text-align: left; font-size: 36px;">Projects</h2>
+
+    <div class="project">
+      <h3>1. Design thinking.</h3>
+      <p>"In our Design Thinking project, we designed and built a portable chair, focusing on innovation, functionality, and user needs." </p>
+      <div style="overflow: hidden; max-width: 800px; margin: 30px auto; font-family: Arial, sans-serif;">
+        <!-- First Image -->
+        <img src="C:\Users\hinga\OneDrive\Documents\chair.jpg" alt="project" style="float: left; width: 350px; height: 250px; margin-right: 20px;">
+        <!-- Second Image -->
+        <img src="dtgroup.jpg" alt="groupchair.jpg" style="float: left; width: 350px; height: 250px; margin-right: 20px;">
+      </div>
+    </div>
+
+    <div class="Robotics Project">
+      <h3>2.Robotics Project</h3>
+      <p>"As part of our Creative Technology course, we developed a line-following car model to explore automation and sensor-based navigation."</p>
+      <!-- First Image -->
+      <img src="C:\Users\hinga\OneDrive\Desktop\Portfolio\c1.jpg" alt="project" style="float: left; width: 350px; height: 250px; margin-right: 20px;">
+      <!-- Second Image -->
+      <img src="C:\Users\hinga\OneDrive\Desktop\Portfolio\c2.jpg" alt="groupchair.jpg" style="float: left; width: 350px; height: 250px; margin-right: 20px;">
+      <!-- Clear the floats -->
+      <div style="clear: both;"></div>
+    </div>
+
+    <!-- Spacing between rows -->
+    <br>
+
+    <div class="Datathon project">
+      <h3>3.Datathon project</h3>
+      <p>"As part of our Datathon project, we created an AI-powered porfolio and resume builder platform."</p>
+      <a href="https://preview--resume-ai-artisan.lovable.app/" target="_blank"> project</a>
+    </div>
+    
+    <!-- Modal for image gallery -->
+    <div id="achievementModal" class="modal">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="modalImage">
+      <div class="modal-info">
+        <h3 id="modalTitle"></h3>
+        <p id="modalDescription"></p>
+      </div>
+    </div>
+    
+    <button class="scroll-btn" onclick="showSection('hobbiesSection')">Hobbies <i class="fa-solid fa-arrow-down"></i></button>
+  </div>
+</div>
+
+<!-- Hobbies -->
+<div class="container">
+  <div class="hobbies-me" id="hobbiesSection" data-aos="fade-up">
+    <h2><i class="fas fa-heart"></i> My Hobbies</h2>
+    <p>These are the activities that bring me joy and inspiration:</p>
+    
+    <div class="hobby-item">
+      <h3><i class="fas fa-camera"></i> Photography</h3>
+      <p>I love capturing moments and landscapes, especially nature photography.</p>
+      <img src="C:\Users\hinga\OneDrive\Documents\photography.jpg" alt="Photography" width="500" height="500">
+    </div>
+    
+    <div class="hobby-item">
+      <h3><i class="fas fa-paint-brush"></i> Drawing & Painting</h3>
+      <p>Art has been my passion since childhood. I enjoy sketching portraits and painting landscapes.</p>
+      <img src="C:\Users\hinga\OneDrive\Documents\painting.jpg" alt="painting" width="500" height="500">
+    </div>
+    
+    <div class="hobby-item">
+      <h3><i class="fas fa-laptop-code"></i> Coding Projects</h3>
+      <p>I enjoy working on small coding projects to explore new technologies and solve problems.</p>
+      <img src="C:\Users\hinga\OneDrive\Documents\coding.jpg" alt="coding" width="500" height="500">
+    </div>
+    
+    <div class="hobby-item">
+      <h3><i class="fas fa-book"></i> Reading</h3>
+      <p>I love reading books on technology, psychology, and fiction novels in my free time.</p>
+      <img src="C:\Users\hinga\OneDrive\Documents\book.jpg" alt="reading" width="500" height="500">
+    </div>
+    
+    <div class="hobby-item">
+      <h3><i class="fas fa-hiking"></i> Nakshtra dance</h3>
+      <p>I like to dance and participate in cultural event.</p>
+      <img src="C:\Users\hinga\OneDrive\Documents\dance.jpg" alt="dance" width="400" height="400">
+    </div>
+    
+    <button class="scroll-btn" onclick="showSection('skillsSection')">Skills <i class="fa-solid fa-arrow-down"></i></button>
+  </div>
+</div>
+
+<!-- Skills -->
+<div class="container">
+  <div class="skills-me" id="skillsSection" data-aos="fade-up">
+    <h2><i class="fas fa-tools"></i> Skills</h2>
+    <div class="skill-bar"><div class="bar-title">C</div><div class="bar-container"><div class="bar" style="width: 90%; background: #4caf50;">90%</div></div></div>
+    <div class="skill-bar"><div class="bar-title">C++</div><div class="bar-container"><div class="bar" style="width: 85%; background: #2196f3;">85%</div></div></div>
+    <div class="skill-bar"><div class="bar-title">Python</div><div class="bar-container"><div class="bar" style="width: 55%; background: #ff9800;">55%</div></div></div>
+    <div class="skill-bar"><div class="bar-title">HTML</div><div class="bar-container"><div class="bar" style="width: 70%; background: #9c27b0;">70%</div></div></div>
+    <div class="skill-bar"><div class="bar-title">CSS</div><div class="bar-container"><div class="bar" style="width: 40%; background: #00bcd4;">40%</div></div></div>
+    <div class="skill-bar"><div class="bar-title">Linux</div><div class="bar-container"><div class="bar" style="width: 60%; background: #795548;">60%</div></div></div>
+    <button class="scroll-btn" onclick="showSection('certificatesSection')">Certificates <i class="fa-solid fa-arrow-down"></i></button>
+  </div>
+</div>
+
+<!-- Certificates -->
+<div class="container">
+  <div class="certificates-me" id="certificatesSection" data-aos="fade-up">
+    <h2><i class="fas fa-certificate"></i> Certificates</h2>
+    <p>My Certificates:</p>
+    <div class="certificate-grid">
+      <div class="certificate-item">
+        <img src="linux1.jpg" alt="C Certificate">
+      </div>
+      <div class="certificate-item">
+        <img src="linux2.jpg" alt="C Certificate">
+      </div>
+      <div class="certificate-item">
+        <img src="data.jpg" alt="Datathon">
+      </div>
+      
+      <div class="certificate-item">
+        <img src="py1.jpg" alt="Simplilearn">
+      </div>
+      <div class="certificate-item">
+        <img src="py2.jpg" alt="Great Learning">
+      </div>
+      <div class="certificate-item">
+        <img src="caram.jpg" alt="C Certificate">
+      </div>
+    </div>
+    
+    <button class="scroll-btn" onclick="showSection('contactSection')">Contact Me <i class="fa-solid fa-arrow-down"></i></button>
+  </div>
+</div>
+
+<!-- Contact Me -->
+<div class="container">
+  <div class="contact-me" id="contactSection" data-aos="fade-up">
+    <div class="contact-header">
+      <h2><i class="fas fa-envelope"></i> Get In Touch</h2>
+      <p>Have a project in mind or want to collaborate? Feel free to reach out!</p>
+    </div>
+    
+    <div class="contact-info">
+      <div class="contact-card pulse">
+        <i class="fas fa-envelope"></i>
+        <h3>Email</h3>
+        <p>hinganghatkarj@gmail.com</p>
+      </div>
+      
+      <div class="contact-card pulse">
+        <i class="fas fa-university"></i>
+        <h3>College Email</h3>
+        <p>202401100025@mitaoe.ac.in</p>
+      </div>
+      
+      <div class="contact-card pulse">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>Location</h3>
+        <p>Wardha ,Maharastra</p>
+      </div>
+    </div>
+    
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Enter your name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Your Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="message">Your Message</label>
+        <textarea id="message" rows="5" placeholder="I'd love to hear from you!" required></textarea>
+      </div>
+      
+      <button type="submit" class="submit-btn">
+        <i class="fas fa-paper-plane"></i> Send Message
+      </button>
+    </form>
+    
+    <div class="social-links" style="margin-top: 30px;">
+      <a href="https://www.instagram.com/_janhavi.18" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="mailto:hinganghtkarj@gmail.com"><i class="fas fa-envelope"></i></a>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script>
+  AOS.init();
+
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 80, density: { enable: true, value_area: 800 } },
+      color: { value: "#ffffff" },
+      shape: { type: "circle", polygon: { nb_sides: 5 } },
+      opacity: { value: 0.5 },
+      size: { value: 3, random: true },
+      line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+      move: { enable: true, speed: 4 }
+    },
+    interactivity: {
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" }
+      },
+      modes: {
+        grab: { distance: 200, line_linked: { opacity: 0.7 } },
+        push: { particles_nb: 4 }
+      }
+    },
+    retina_detect: true
+  });
+
+  function startPortfolio() {
+    document.getElementById('introSection').style.display = 'none';
+    document.querySelectorAll('.container')[0].style.display = 'flex';
+    document.getElementById('aboutMeSection').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showSection(id) {
+    // Hide all sections
+    document.querySelectorAll('.about-me, .education-me, .achievements-me, .hobbies-me, .skills-me, .certificates-me, .contact-me')
+      .forEach(sec => sec.style.display = 'none');
+    
+    // Hide all containers
+    document.querySelectorAll('.container').forEach(cont => {
+      cont.style.display = 'none';
+    });
+    
+    // Show the target container and section
+    const targetSection = document.getElementById(id);
+    const targetContainer = targetSection.parentNode;
+    
+    targetContainer.style.display = 'flex';
+    targetSection.style.display = 'block';
+    
+    // Scroll to the section
+    window.scrollTo({
+      top: targetContainer.offsetTop,
+      behavior: 'smooth'
+    });
+  }
+
+  // Modal functions for achievements gallery
+  function openModal(imgSrc, title, description) {
+    const modal = document.getElementById('achievementModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDescription');
+    
+    modal.style.display = "block";
+    modalImg.src = imgSrc;
+    modalTitle.textContent = title;
+    modalDesc.textContent = description;
+    
+    // Close modal when clicking outside the image
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+  }
+  
+  function closeModal() {
+    document.getElementById('achievementModal').style.display = "none";
+  }
+
+  document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    
+    // Create a nice confirmation message
+    const confirmation = document.createElement('div');
+    confirmation.innerHTML = `
+      <div style="background: rgba(0,200,100,0.2); padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center;">
+        <i class="fas fa-check-circle" style="color: #4CAF50; font-size: 30px;"></i>
+        <h3 style="color: #4CAF50; margin: 10px 0;">Thank you, ${name}!</h3>
+        <p>Your message has been sent successfully.</p>
+        <p>I'll get back to you soon at ${email}.</p>
+      </div>
+    `;
+    
+    // Replace form with confirmation
+    const form = document.getElementById('contactForm');
+    form.parentNode.insertBefore(confirmation, form);
+    form.style.display = 'none';
+    
+    // Reset form after showing confirmation
+    setTimeout(() => {
+      form.reset();
+      form.style.display = 'block';
+      confirmation.remove();
+    }, 5000);
+  });
+
+  // Scroll to top button
+  const scrollTopBtn = document.getElementById("scrollTopBtn");
+  window.onscroll = function () {
+    scrollTopBtn.style.display = (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) ? "block" : "none";
+  };
+  scrollTopBtn.onclick = function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  
+  // Animate skill bars when they come into view
+  const skillBars = document.querySelectorAll('.bar');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        const width = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => {
+          bar.style.width = width;
+        }, 100);
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  skillBars.forEach(bar => {
+    observer.observe(bar);
+  });
+  
+  // Add pulse animation to contact cards on hover
+  const contactCards = document.querySelectorAll('.contact-card');
+  contactCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.classList.add('pulse');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('pulse');
+    });
+  });
+  
+  // Add glow effect to important elements
+  const importantElements = document.querySelectorAll('.hi-text, h2, .achievement-badge');
+  importantElements.forEach(el => {
+    el.classList.add('glow');
+  });
+</script>
+</body>
+</html>
